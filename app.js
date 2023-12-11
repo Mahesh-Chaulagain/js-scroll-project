@@ -1,7 +1,7 @@
 // Element.getBoundingClientRect() method returns the size of an element and its position relative to the viewport.
 // scrollY is a read - only window property that returns the number of pixels the document has been scrolled vertically.
 // slice extracts a section of a string without modifying original string
-//offsetTop - A Number, representing the top position of the element, in pixels
+// offsetTop - A Number, representing the top position of the element, in pixels
 
 document.addEventListener("DOMContentLoaded", function() {
     // ********** set date ************
@@ -43,8 +43,43 @@ document.addEventListener("DOMContentLoaded", function() {
         else{
             topLink.classList.remove("show-link");
         }
-    })
+    });
+    
 
     // ********** smooth scroll ************
     // select links
+    const scrollLinks = document.querySelectorAll(".scroll-link");
+    
+   scrollLinks.forEach(function(link) {
+    link.addEventListener("click", function(e) {
+        // prevent default
+        e.preventDefault();
+        // navigate to specific spot 
+        const id = e.currentTarget.getAttribute("href").slice(1);
+        const element = document.getElementById(id);
+
+        // calculate the heights
+        const navHeight = navbar.getBoundingClientRect().height;
+        const containerHeight = linksContainer.getBoundingClientRect().height;
+        const fixedNav = navbar.classList.contains("fixed-nav");
+
+        let position = element.offsetTop - navHeight;
+
+        if (!fixedNav) {
+            position -= navHeight;
+        }
+
+        if (navHeight > 82) {
+            position += containerHeight;
+        }
+
+        window.scrollTo({
+            left: 0,
+            top: position,
+            behavior: "smooth", // Add smooth scrolling effect
+        });
+
+        linksContainer.style.height = 0;
+    });
+});
 });
